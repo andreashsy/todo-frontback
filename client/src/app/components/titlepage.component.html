@@ -1,0 +1,15 @@
+<h2>All Your Todos</h2>
+<div *ngFor="let todoObject of todoObjects" class="todo-title" [routerLink]="['/todo', todoObject.tid]">
+  {{todoObject.title}}
+</div>
+<button [routerLink]="['/add']">Add</button>
+<br>
+<hr>
+<br>
+<h2>Server functions</h2>
+<table>
+  <tr>
+    <td><button (click)="serverRefresh()">Refresh</button></td>
+    <td><button (click)="serverUpload()">Upload</button></td>
+  </tr>
+</table>
