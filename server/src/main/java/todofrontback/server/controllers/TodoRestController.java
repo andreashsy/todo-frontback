@@ -3,10 +3,14 @@ package todofrontback.server.controllers;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.json.Json;
@@ -17,12 +21,17 @@ import todofrontback.server.models.Todo;
 @RequestMapping(path="/api")
 public class TodoRestController {
 
+    String jsonArrayList = """
+    [{"title":"server title 1","description":"server description 1","priority":"medium","tid":"11111111"},
+    {"title":"server title 2","description":"server description 2","priority":"medium","tid":"22222222"},
+    {"title":"server title 3","description":"server description 3","priority":"medium","tid":"33333333"}]""";
+
     List<Todo> serverTodoList = new LinkedList<Todo>();
     
     @GetMapping(path="/getTodo")
     public ResponseEntity<String> getTodo() {
 
-        Todo todo1 = new Todo();
+        /* Todo todo1 = new Todo();
         todo1.generateDefault("1");
         Todo todo2 = new Todo();
         todo2.generateDefault("2");
@@ -49,10 +58,17 @@ public class TodoRestController {
                 .add("description", todo3.description)
                 .add("priority", todo3.priority)
                 .add("tid", todo3.tid))
-            .build();
+            .build(); */
 
-        return ResponseEntity.ok(jsonArray.toString());
+        return ResponseEntity.ok(this.jsonArrayList);
     }
 
+    @PostMapping(path="/data")
+    public ResponseEntity<String> saveData(@RequestBody String requestBody) {
+        System.out.println("received data: " + requestBody);
+        this.jsonArrayList = requestBody;
+        return ResponseEntity.ok("""
+        {"message": "success!"}""");
+    }
     
 }

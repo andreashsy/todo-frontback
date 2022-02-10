@@ -8,6 +8,8 @@ import { TitlepageComponent } from './components/titlepage.component';
 import { TodoInfoComponent } from './components/todo-info.component';
 import { TodoAddComponent } from './components/todo-add.component';
 import { TodoService } from './components/todo.service';
+import { ServerService } from './components/server.service';
+import { HttpClientModule } from "@angular/common/http";
 
 const appRoutes: Routes = [
   {path: '', component: TitlepageComponent},
@@ -25,9 +27,11 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     FormsModule, ReactiveFormsModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [ TodoService ],
+  providers: [ TodoService,
+                ServerService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Todo } from './module';
+import { Todo } from './model';
 import { TodoService } from './todo.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class TodoInfoComponent implements OnInit {
     this.initialiseForm()
     this.todoSvc.getTodoByTid(this.tid)
       .then(result => {
-        this.todo = result
+        this.todo = new Todo(result.tid, result.title, result.description, result.priority)
         this.initialiseForm(result)
       })
   }
@@ -42,13 +42,8 @@ export class TodoInfoComponent implements OnInit {
 
   editTodo() {
     let editedTodo = this.editForm.value as Todo
-    console.info("updating todo: ", this.todo.tid)
 
-    //this.todo.update(editedTodo)
-
-    this.todo.title = editedTodo.title
-    this.todo.description = editedTodo.description
-    this.todo.priority = editedTodo.priority
+    this.todo.update(editedTodo)
 
     this.todoSvc.updateTodo(this.todo, this.todo.tid)
       .then(result => {

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import Dexie from "dexie";
-import { Todo } from "./module";
+import { Todo } from "./model";
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -23,6 +23,10 @@ export class TodoService extends Dexie {
     return this.todo.put(todo as Todo)
   }
 
+  add(todo: Todo): Promise<string> {
+    return this.todo.put(todo as Todo)
+  }
+
   public async getAllTitles(): Promise<string[]> {
     const t = await this.todo.toArray()
     return t.map(v => v.title)
@@ -39,7 +43,7 @@ export class TodoService extends Dexie {
   }
 
   public async updateTodo(todo: Todo, tid: string) {
-    return this.todo.put(todo, tid)
+    return await this.todo.put(todo, tid)
   }
 
   public async deleteTodo(tid: string) {
@@ -47,5 +51,9 @@ export class TodoService extends Dexie {
       .where("tid").equals(tid)
       .delete()
     return t
+  }
+
+  public async deleteAll():Promise<any> {
+    return await this.todo.clear()
   }
 }
