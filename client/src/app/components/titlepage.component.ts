@@ -32,26 +32,36 @@ export class TitlepageComponent implements OnInit {
 
   async serverRefresh() {
     console.info("refresh button pressed! Getting data from serve...")
-    let data = await this.serverSvc.getServerData()
+    let data = ""
+    await this.serverSvc.getServerData()
+      .then(result => {
+        console.log(result)
+        data = result
+      })
+      .catch(error => {
+        console.error("serverRefresh > getServerData", error)
+      })
     console.info(data)
+
     this.todoSvc.deleteAll()
       .then(result => {
         console.info("All database items deleted! ", result)
       })
       .catch(error => {
-        console.error(error)
+        console.error("serverRefresh > deleteAll", error)
       })
 
-    //let jsonArray = JSON.parse(data)
     for (let json of data) {
       this.todoSvc.add(json as unknown as Todo)
         .then(result => {
           console.log(result)
         })
         .catch(error => {
-          console.log(error)
+          console.error("serverRefresh > add", error)
         })
     }
+
+    this.getAllTodoObjects()
   }
 
   async serverUpload() {
@@ -60,7 +70,9 @@ export class TitlepageComponent implements OnInit {
     let jsonString = todoObjects
       .map(a => JSON.stringify(a))
       .join(",")
+    jsonString = '[' + jsonString + ']'
     console.info("uploading string: ", jsonString)
+
     this.serverSvc.sendTodoList(jsonString)
       .then(result => {
         console.info(result)

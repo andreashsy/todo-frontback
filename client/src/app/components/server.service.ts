@@ -9,7 +9,7 @@ export class ServerService {
 
   }
 
-  url = "http://localhost:8080/"
+  url = "/"
 
   public async getServerData(): Promise<string> {
     return await lastValueFrom(
